@@ -32,7 +32,7 @@
 eg：
 
 ```
-    http://39.105.8.100:8001/list?p=1&n=30&w=简单爱
+    http://api.zsfmyz.top/list?p=1&n=30&w=简单爱
 ```
 
 返回参数举例
@@ -108,7 +108,7 @@ list中歌曲信息比普通列表多了排名: cur_count
 eg：
 
 ```
-    http://39.105.8.100:8001/list?p=1&n=30&w=简单爱
+    http://api.zsfmyz.top/top
 ```
 
 返回参数举例
@@ -275,7 +275,7 @@ eg：
 eg:
 
 ```
-    39.105.8.100:8001/music?songmid=003lghpv0jfFXG&guid=126548448
+    http://api.zsfmyz.top/music?songmid=003lghpv0jfFXG&guid=126548448
 ```
 
 返回参数举例
