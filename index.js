@@ -10,8 +10,10 @@ const searchUrl = '/soso/fcgi-bin/client_search_cp';
 const albumimgUrl = 'http://imgcache.qq.com/music/photo/album_300/';
 const tokenUrl = '/base/fcgi-bin/fcg_music_express_mobile3.fcg';
 const lyricUrl = '/lyric/fcgi-bin/fcg_query_lyric_new.fcg';
+const top100Url = '/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8¬ice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=27&_=1519963122923'
 
 
+// 解析jsonp返回数据 正则匹配
 const jsonpRegExp = new RegExp(/(?<=callback\().*(?=\))/);
 
 app.use(express.static(publicPath))
@@ -69,6 +71,7 @@ function getMusicToken(params) {
             }}).then(res => {
                 let musicUrl = "http://ws.stream.qqmusic.qq.com/" + res.data.data.items[0].filename + "?fromtag=0&guid=" + params.guid + '&vkey=' + res.data.data.items[0].vkey
                 resolve({
+                    vkey: res.data.data.items[0].vkey,
                     musicUrl: musicUrl
                 });
             }, err => {
@@ -77,12 +80,55 @@ function getMusicToken(params) {
     })
 }
 
+// 获取top100
+function getMusicTop() {
+    return new Promise((resolve, reject) => {
+        musicInterface({
+            method: 'get',
+            url: top100Url
+        }).then(res => {
+            res = res.data;
+            console.log(res);
+            
+            let params  = {
+                code: res.code,
+                date: res.date,
+                curnum: res.total_song_num,
+                curpage: 1,
+                list: [],
+                topinfo: res.topinfo
+            }
+
+            for (let item of res.songlist) {
+                params.list.push({
+                    cur_count: item.cur_count,
+                    songname: item.data.songname,
+                    singer: item.data.singer[0],
+                    albumname: item.data.albumname,
+                    songmid: item.data.songmid,
+                    albumimg: albumimgUrl + item.data.albumid % 100 + '300_albumpic_' + item.data.albumid + '_0.jpg'
+                })
+            }
+            resolve(params);
+        }, err => {
+            reject(err);
+        })
+    })
+}
+
+
+
+// 目前不需要async
 async function asyncGetMusicList(params) {
     return await getMusicList(params);
 }
 
 async function asyncgetMusicToken(params) {
     return await getMusicToken(params);
+}
+
+async function asyncgetMusicTop() {
+    return await getMusicTop();
 }
 
 app.get('/list', (req, res) => {
@@ -92,18 +138,32 @@ app.get('/list', (req, res) => {
             data: data
             }));
     }, err => {
-        res.end(err);
+        res.end(JSON.stringify(err));
     })
 })
 
 app.get('/music', (req, res) => {
+    req.query.aggr = 1;
+    req.query.flag_qc = 0;
+    req.query.cr = 1;
     asyncgetMusicToken(req.query).then((data)=>{
         res.end(JSON.stringify({
             code: '0',
             data: data
         }));
     }, err => {
-        res.end(err);
+        res.end(JSON.stringify(err));
+    })
+})
+
+app.get('/top', (req, res) => {
+    asyncgetMusicTop().then((data)=>{
+        res.end(JSON.stringify({
+            code: '0',
+            data: data
+        }));
+    }, err => {
+        res.end(JSON.stringify(err));
     })
 })
 
