@@ -12,6 +12,7 @@
   "author": "zsf",
   "license": "ISC",
   "dependencies": {
+    "apicache": "^1.5.2",
     "axios": "^0.19.0",
     "express": "^4.17.1"
   }
