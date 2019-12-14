@@ -44,7 +44,7 @@ function getMusicList(params, callback) {
                     singer: item.singer[0],
                     albumname: item.albumname,
                     songmid: item.songmid,
-                    albumimg: apiUrl.albumimgUrl + item.albumid % 100 + '300_albumpic_' + item.albumid + '_0.jpg'
+                    albumimg: apiUrl.albumimgUrl + item.albumid % 100 + '/300_albumpic_' + item.albumid + '_0.jpg'
                 })
             }
             resolve(params);
