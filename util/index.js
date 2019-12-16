@@ -12,6 +12,14 @@ const url = {
     top100Url: top100Url,
 }
 
+// 解析jsonp返回数据 正则匹配
+const jsonpRegExp = new RegExp(/(?<=callback\().*(?=\))/);
+
+const regExp = {
+    jsonpRegExp : jsonpRegExp
+}
+
 module.exports = {
-    url: url
+    url: url,
+    regExp: regExp
 }
