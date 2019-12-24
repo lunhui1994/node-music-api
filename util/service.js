@@ -29,14 +29,13 @@ function getMusicList(params, callback) {
                 curpage: res.data.song.curpage,
                 list: []
             }
-
             for (let item of res.data.song.list) {
                 params.list.push({
                     songname: item.songname,
                     singer: item.singer[0],
                     albumname: item.albumname,
                     songmid: item.songmid,
-                    albumimg: apiUrl.albumimgUrl + item.albumid % 100 + '/300_albumpic_' + item.albumid + '_0.jpg'
+                    albumimg: apiUrl.albumimgUrl + (item.albumid % 100) + '/300_albumpic_' + item.albumid + '_0.jpg'
                 })
             }
             resolve(params);
@@ -49,6 +48,7 @@ function getMusicList(params, callback) {
 // 获取token 拼接播放地址
 function getMusicToken(params) {
     let songmid = params.songmid;
+    let guid = params.guid;
     let filename = 'C400' + params.songmid + '.m4a';
     return new Promise(resolve => {
         musicInterface({
@@ -58,7 +58,7 @@ function getMusicToken(params) {
                 format: 'json205361747',
                 platform: 'yqq',
                 cid: '205361747',
-                guid: '5043253136', //126548448
+                guid: guid, //126548448 5043253136
                 songmid: songmid,
                 filename: filename
             }
@@ -98,7 +98,7 @@ function getMusicTop() {
                     singer: item.data.singer[0],
                     albumname: item.data.albumname,
                     songmid: item.data.songmid,
-                    albumimg: apiUrl.albumimgUrl + item.data.albumid % 100 + '300_albumpic_' + item.data.albumid + '_0.jpg'
+                    albumimg: apiUrl.albumimgUrl + item.data.albumid % 100 + '/300_albumpic_' + item.data.albumid + '_0.jpg'
                 })
             }
             resolve(params);
