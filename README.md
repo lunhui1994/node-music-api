@@ -10,6 +10,8 @@
 
 本项目所支持的Api
 
+## 音乐 music
+
 ### 音乐列表
 
 #### list
@@ -32,7 +34,7 @@
 eg：
 
 ```
-    http://api.zsfmyz.top/list?p=1&n=30&w=简单爱
+    http://api.zsfmyz.top/music/list?p=1&n=30&w=简单爱
 ```
 
 返回参数举例
@@ -108,7 +110,7 @@ list中歌曲信息比普通列表多了排名: cur_count
 eg：
 
 ```
-    http://api.zsfmyz.top/top
+    http://api.zsfmyz.top/music/top
 ```
 
 返回参数举例
@@ -255,7 +257,7 @@ eg：
 
 ### 音乐播放地址
 
-#### music
+#### song
 
 
 | 参数   |  类型  |  描述 |
@@ -275,7 +277,7 @@ eg：
 eg:
 
 ```
-    http://api.zsfmyz.top/music?songmid=003lghpv0jfFXG&guid=126548448
+    http://api.zsfmyz.top/music/song?songmid=003lghpv0jfFXG&guid=126548448
 ```
 
 返回参数举例
@@ -290,6 +292,70 @@ eg:
 
 ```
 
+
+## 福利图片 welfare
+
+> 根据每日福利社的接口进行了封装，因为他们的https失效了，所以自己反向代理了。
+
+## 图片列表
+
+#### list
+
+
+| 参数   |  类型  |  描述 |
+| ---    |  ---   | ---   |
+| per_page | string  | 每页数据量 | 
+| page | string  | 第几页| 
+
+其他参数固定
+
+返回参数
+
+如下：
+
+
+eg:
+
+```
+    http://www.xxx.com/welfare/list?per_page=20&page=2
+```
+
+返回参数举例
+
+```
+{
+    "code": 0,
+    "data": {
+        "error": false,
+        "results": [
+            {
+                "_id": "5b63cd4e9d21225e0d3f58c9",
+                "createdAt": "2018-08-03T11:34:38.672Z",
+                "desc": "2018-08-03", //描述 
+                "publishedAt": "2018-08-03T00:00:00.0Z",
+                "source": "api",
+                "type": "福利", // 类型
+                "url": "https://ww1.sinaimg.cn/large/0065oQSqgy1ftwcw4f4a5j30sg10j1g9.jpg", //图片地址
+                "used": true,
+                "who": "lijinshan"
+            },
+            {
+                "_id": "5b6151509d21225206860f08",
+                "createdAt": "2018-08-01T14:21:04.556Z",
+                "desc": "2018-08-01",
+                "publishedAt": "2018-08-01T00:00:00.0Z",
+                "source": "api",
+                "type": "福利",
+                "url": "https://ww1.sinaimg.cn/large/0065oQSqly1ftu6gl83ewj30k80tites.jpg",
+                "used": true,
+                "who": "lijinshan"
+            },
+            // ...
+        ]
+    }
+}
+
+```
 
 
 
