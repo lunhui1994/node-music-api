@@ -3,7 +3,12 @@
  * 1. /list 音乐列表
  * 2. /song 音乐地址
  * 3. /top 排行榜
- */ 
+ * 4. /lyric 歌词
+ */
+
+// URLSearchParams 处理url参数 
+// var paramsString = "q=URLUtils.searchParams&topic=api"
+// var searchParams = new URLSearchParams(paramsString);
 
 const express = require('express')
 const router = express.Router()
@@ -21,9 +26,6 @@ router.get('/list', (req, res) => {
 })
 
 router.get('/song', (req, res) => {
-    req.query.aggr = 1;
-    req.query.flag_qc = 0;
-    req.query.cr = 1;
     service.asyncGetMusicToken(req.query).then((data)=>{
         res.setHeader('Cache-Control', 'public, max-age=86400 ');
         res.end(JSON.stringify({
@@ -40,6 +42,19 @@ router.get('/top', (req, res) => {
         res.end(JSON.stringify({
             code: '0',
             data: data
+        }));
+    }, err => {
+        res.end(JSON.stringify(err));
+    })
+})
+
+router.get('/lyric', (req, res) => {
+    service.asyncGetLyric(req.query).then((data)=>{
+        res.end(JSON.stringify({
+            code: '0',
+            data: {
+                lyric: data.lyric
+            }
         }));
     }, err => {
         res.end(JSON.stringify(err));

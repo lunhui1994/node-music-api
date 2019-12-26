@@ -7,6 +7,12 @@
     node index.js
 ```
 
+#### 2019/12/26 更新
+
+1. 获取歌曲播放地址接口 增加 lyric参数代表是否获取歌词。
+2. 增加获取歌词接口
+
+
 #### 2019/12/24 更新
 
 1. 所有音乐接口更改，增加一层music/ ，获取地址改为 music/song
@@ -116,7 +122,7 @@ list中歌曲信息比普通列表多了排名: cur_count
 eg：
 
 ```
-    http://api.zsfmyz.top/music/top
+    https://api.zsfmyz.top/music/top
 ```
 
 返回参数举例
@@ -270,6 +276,7 @@ eg：
 | ---    |  ---   | ---   |
 | songmid | string  | 用于获取token | 
 | guid | string  | 用于获取token| 
+| lyric | string  | 默认为0不获取歌词，1获取歌词 | 
 
 其他参数固定
 
@@ -283,7 +290,7 @@ eg：
 eg:
 
 ```
-    http://api.zsfmyz.top/music/song?songmid=003lghpv0jfFXG&guid=126548448
+    https://api.zsfmyz.top/music/song?songmid=003lghpv0jfFXG&guid=126548448
 ```
 
 返回参数举例
@@ -292,7 +299,45 @@ eg:
     {
     "code": "0",
     "data": {
-        "musicUrl": "http://ws.stream.qqmusic.qq.com/C400003lghpv0jfFXG.m4a?fromtag=0&guid=126548448&vkey=7888A32FC10168AAD914CA484401762D7F060E7337C0B9187D8B907681BB177669ADB3DFBF398E0FC4D6ED1E0EC7574716872D7B5FE14322"
+        "musicUrl": "http://ws.stream.qqmusic.qq.com/C400003lghpv0jfFXG.m4a?fromtag=0&guid=126548448&vkey=7888A32FC10168AAD914CA484401762D7F060E7337C0B9187D8B907681BB177669ADB3DFBF398E0FC4D6ED1E0EC7574716872D7B5FE14322",
+        "lyric": "无"
+    }
+}
+
+```
+
+### 音乐歌词
+
+#### lyric
+
+
+| 参数   |  类型  |  描述 |
+| ---    |  ---   | ---   |
+| songmid | string  | 用于获取歌词 | 
+
+其他参数固定
+
+返回参数
+
+| 参数   |  类型  |  描述 |
+| ---    |  ---   | ---   |
+| lyric | string  | 歌词内容| 
+
+
+eg:
+
+```
+    https://api.zsfmyz.top/music/lyric?songmid=000wocYU11tSzS
+```
+
+返回参数举例
+
+```
+    {
+    "code": "0",
+    "data": {
+        "lyric": "[ti:差不多姑娘]\n[ar:G.E.M. 邓紫棋]\n[al:差不多姑娘]\n[by:]\n[offset:0]\n[00:00.00]差不多姑娘 - G.E.M. 邓紫棋\n[00:00.17]\n[00:02.67]差不多的姑娘\n[00:06.27]追逐差不多的漂亮\n[00:11.88]她们差不多的愿望\n[00:17.18]牵着她们鼻子方向\n[00:23.05]我回到差不多的家\n[00:24.38]躺在差不多的沙发\n[00:25.68]微博差不多的刷\n[00:26.99]都吃着差不多的瓜\n[00:28.48]那标题差不多的炸\n[00:29.78]...",
+        }
     }
 }
 
@@ -323,7 +368,7 @@ eg:
 eg:
 
 ```
-    http://www.xxx.com/welfare/list?per_page=20&page=2
+    https://api.zsfmyz.top/welfare/list?per_page=20&page=2
 ```
 
 返回参数举例
