@@ -175,7 +175,7 @@ async function asyncGetMusicList(params) {
 }
 // 歌曲地址
 async function asyncGetMusicToken(params) {
-    if (params.lyric) {
+    if (params.lyric == '1') {
         var lyricData = await getLyric(params);
         return await getMusicToken(params, lyricData);
     } else {
