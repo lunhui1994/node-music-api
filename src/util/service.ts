@@ -33,19 +33,20 @@ const apiUrl = {
 };
 
 // 获取音乐列表
-function getMusicList(params, callback) {
+function getMusicList(params: any) {
     return new Promise((resolve, reject) => {
         musicInterface({
             method: 'get',
             url: apiUrl.searchUrl,
             params: params
-        }).then(res => {
+        }).then((res: { data: { match: (arg0: any) => string[]; song: { curnum: any; curpage: any; list: any; }; }; }) => {
             res = JSON.parse(res.data.match(regExp.jsonpRegExp)[0]);
-            let params = {
-                curnum: res.data.song.curnum,
-                curpage: res.data.song.curpage,
-                list: []
+            class paramC {
+                curnum:number = res.data.song.curnum
+                curpage:number = res.data.song.curpage
+                list:any[] = []
             }
+            let params = new paramC();
             for (let item of res.data.song.list) {
                 params.list.push({
                     songname: item.songname,
@@ -56,7 +57,7 @@ function getMusicList(params, callback) {
                 })
             }
             resolve(params);
-        }, err => {
+        }, (err: any) => {
             reject(err);
         })
     })
@@ -71,7 +72,7 @@ function getMusicList(params, callback) {
     * @param: songmid 歌曲songmid，需要在搜索歌曲后获取
     * @param: filename 文件名
     */
-function getMusicToken(params, lyricData) {
+function getMusicToken(params: { guid: string; songmid: string; }, lyricData?: any) {
     let params_data = {
         format: 'json205361747',
         platform: 'yqq',
@@ -83,12 +84,12 @@ function getMusicToken(params, lyricData) {
         flag_qc: 0,
         cr: 0
     }
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         musicInterface({
             method: 'get',
             url: apiUrl.tokenUrl,
             params: params_data
-        }).then(res => {
+        }).then((res: any) => {
             let musicUrl = "http://ws.stream.qqmusic.qq.com/" + res.data.data.items[0].filename + "?fromtag=0&guid=" + params.guid + '&vkey=' + res.data.data.items[0].vkey
             
             let lyric = (lyricData && lyricData.code == '0') ? lyricData.lyric : '无';
@@ -97,7 +98,7 @@ function getMusicToken(params, lyricData) {
                 musicUrl: musicUrl,
                 lyric: lyric
             });
-        }, err => {
+        }, (err: any) => {
             reject(err);
         })
     })
@@ -111,16 +112,19 @@ function getMusicTop() {
         musicInterface({
             method: 'get',
             url: apiUrl.top100Url
-        }).then(res => {
+        }).then((res: { data: any; code: any; date: any; total_song_num: any; topinfo: any; songlist: any; }) => {
             res = res.data;
-            let params = {
-                code: res.code,
-                date: res.date,
-                curnum: res.total_song_num,
-                curpage: 1,
-                list: [],
-                topinfo: res.topinfo
+          
+            class paramC {
+                code:string = res.code
+                date:string = res.date
+                curnum:number = res.total_song_num
+                curpage:number = 1
+                list: any[] = []
+                topinfo: any = res.topinfo
             }
+
+            let params = new paramC();
 
             for (let item of res.songlist) {
                 params.list.push({
@@ -133,7 +137,7 @@ function getMusicTop() {
                 })
             }
             resolve(params);
-        }, err => {
+        }, (err: any) => {
             reject(err);
         })
     })
@@ -145,7 +149,7 @@ function getMusicTop() {
 	* @param: format 格式，建议加上format=json
 	* @param: nobase64 默认0, 必须填1格式化返回数据
     */
-function getLyric(params) {
+function getLyric(params: { format: string; nobase64: number; }) {
     params.format = 'json';
     params.nobase64 = 1;
     return new Promise((resolve, reject) => {
@@ -156,9 +160,9 @@ function getLyric(params) {
             },
             url: apiUrl.lyricUrl,
             params: params
-        }).then(res => {
+        }).then((res: { data: unknown; }) => {
             resolve(res.data);
-        }, err => {
+        }, (err: any) => {
             reject(err);
         })
     })
@@ -170,11 +174,11 @@ function getLyric(params) {
  * @TODO 后续更改async用法方式。
  */
 // 搜索列表
-async function asyncGetMusicList(params) {
+async function asyncGetMusicList(params: any) {
     return await getMusicList(params);
 }
 // 歌曲地址
-async function asyncGetMusicToken(params) {
+async function asyncGetMusicToken(params: any) {
     if (params.lyric == '1') {
         var lyricData = await getLyric(params);
         return await getMusicToken(params, lyricData);
@@ -187,29 +191,29 @@ async function asyncGetMusicTop() {
     return await getMusicTop();
 }
 // 歌词
-async function asyncGetLyric(params) {
+async function asyncGetLyric(params: any) {
     return await getLyric(params);
 }
 
 // 获取福利图片列表
-function getWelfareList(params, callback) {
+function getWelfareList(params: { per_page: string; page: string; }) {
     return new Promise((resolve, reject) => {
         welfareInterface({
             method: 'get',
             url: encodeURI(apiUrl.welfareUrl + params.per_page + '/' + params.page),
-        }).then(res => {
+        }).then((res: { data: unknown; }) => {
             resolve(res.data);
-        }, err => {
+        }, (err: any) => {
             reject(err);
         })
     })
 }
 
-async function asyncGetWelfareList(params) {
+async function asyncGetWelfareList(params: any) {
     return await getWelfareList(params);
 }
 
-module.exports = {
+export default {
     getMusicList: getMusicList,
     asyncGetMusicList: asyncGetMusicList,
     getMusicToken: getMusicToken,

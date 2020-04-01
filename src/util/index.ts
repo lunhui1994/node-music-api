@@ -8,7 +8,14 @@ const regExp = {
 /**
  * {name:'jack',age:12,height:160} => 'jack/12/160'
 */
-const json2url = (params) => {
+
+interface json2urlin {
+    name:string
+    age:number
+    height:number
+}
+
+const json2url = (params: json2urlin[]):string => {
     let url = '';
     for (let key in params) {
         url += '/' + params[key];
@@ -16,7 +23,7 @@ const json2url = (params) => {
     return url;
 }
 
-module.exports = {
+export default {
     regExp: regExp,
     json2url: json2url
 }

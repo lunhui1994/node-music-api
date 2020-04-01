@@ -12,53 +12,53 @@
 
 const express = require('express')
 const router = express.Router()
-const service = require('../util/service.js')
+import service from '../util/service'
 
-router.get('/list', (req, res) => {
-    service.asyncGetMusicList(req.query).then((data)=>{
+router.get('/list', (req: { query: any }, res: { end: (arg0: string) => void }) => {
+    service.asyncGetMusicList(req.query).then((data: any)=>{
         res.end(JSON.stringify({
             code: '0',
             data: data
             }));
-    }, err => {
+    }, (err: any) => {
         res.end(JSON.stringify(err));
     })
 })
 
-router.get('/song', (req, res) => {
-    service.asyncGetMusicToken(req.query).then((data)=>{
+router.get('/song', (req: { query: any }, res: { setHeader: (arg0: string,arg1: string) => void; end: (arg0: string) => void }) => {
+    service.asyncGetMusicToken(req.query).then((data: any)=>{
         res.setHeader('Cache-Control', 'public, max-age=86400 ');
         res.end(JSON.stringify({
             code: '0',
             data: data
         }));
-    }, err => {
+    }, (err: any) => {
         res.end(JSON.stringify(err));
     })
 })
 
-router.get('/top', (req, res) => {
-    service.asyncGetMusicTop().then((data)=>{
+router.get('/top', (req: any, res: { end: (arg0: string) => void }) => {
+    service.asyncGetMusicTop().then((data: any)=>{
         res.end(JSON.stringify({
             code: '0',
             data: data
         }));
-    }, err => {
+    }, (err: any) => {
         res.end(JSON.stringify(err));
     })
 })
 
-router.get('/lyric', (req, res) => {
-    service.asyncGetLyric(req.query).then((data)=>{
+router.get('/lyric', (req: { query: any }, res: { end: (arg0: string) => void }) => {
+    service.asyncGetLyric(req.query).then((data: any)=>{
         res.end(JSON.stringify({
             code: '0',
             data: {
                 lyric: data.lyric
             }
         }));
-    }, err => {
+    }, (err: any) => {
         res.end(JSON.stringify(err));
     })
 })
 
-module.exports = router;
+export default router
