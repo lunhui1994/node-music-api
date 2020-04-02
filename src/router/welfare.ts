@@ -3,9 +3,9 @@
  * 1. /list 图片列表
  * 
  */ 
-const express = require('express')
+import express = require("express");
+import service from '../util/service'
 const router = express.Router()
-const service = require('../util/service.js')
 
 router.get('/list', (req: { query: any }, res: { end: (arg0: string) => void }) => {
     service.asyncGetWelfareList(req.query).then((data: any)=>{

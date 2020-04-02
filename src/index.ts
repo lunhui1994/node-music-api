@@ -1,5 +1,5 @@
-import express = require('express');
-import path = require('path');
+import express = require("express");
+import * as path from 'path'
 const cache = require('apicache').middleware
 const app = express()
 

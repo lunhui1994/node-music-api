@@ -1,7 +1,7 @@
 // 接口函数
 
-const axios = require('axios')
-const util = require('./index.js')
+import axios from 'axios';
+import util from './index'
 
 const regExp = util.regExp;
 const json2url = util.json2url;
@@ -42,9 +42,9 @@ function getMusicList(params: any) {
         }).then((res: { data: { match: (arg0: any) => string[]; song: { curnum: any; curpage: any; list: any; }; }; }) => {
             res = JSON.parse(res.data.match(regExp.jsonpRegExp)[0]);
             class paramC {
-                curnum:number = res.data.song.curnum
-                curpage:number = res.data.song.curpage
-                list:any[] = []
+                curnum: number = res.data.song.curnum
+                curpage: number = res.data.song.curpage
+                list: any[] = []
             }
             let params = new paramC();
             for (let item of res.data.song.list) {
@@ -72,18 +72,34 @@ function getMusicList(params: any) {
     * @param: songmid 歌曲songmid，需要在搜索歌曲后获取
     * @param: filename 文件名
     */
-function getMusicToken(params: { guid: string; songmid: string; }, lyricData?: any) {
-    let params_data = {
-        format: 'json205361747',
-        platform: 'yqq',
-        cid: '205361747',
-        guid: params.guid, //126548448 5043253136
-        songmid: params.songmid,
-        filename: 'C400' + params.songmid + '.m4a',
-        aggr: 1,
-        flag_qc: 0,
-        cr: 0
+
+interface tokenParams {
+    guid: string
+    songmid: string
+}
+interface tokenLyricData {
+    lyric: string
+    code: string
+}
+class tokenParamsData {
+    format: string = 'json205361747'
+    platform: string = 'yqq'
+    cid: string = '205361747'
+    guid: string = '126548448' //126548448 5043253136
+    songmid: string = ''
+    filename: string = ''
+    aggr: number = 1
+    flag_qc: number = 0
+    cr: number = 0
+    constructor(parameters: tokenParams) {
+        this.guid = parameters.guid
+        this.songmid = parameters.songmid
+        this.filename = 'C400' + parameters.songmid + '.m4a'
     }
+}
+
+function getMusicToken(params: tokenParams, lyricData?: tokenLyricData) {
+    let params_data = new tokenParamsData(params);
     return new Promise((resolve, reject) => {
         musicInterface({
             method: 'get',
@@ -91,7 +107,6 @@ function getMusicToken(params: { guid: string; songmid: string; }, lyricData?: a
             params: params_data
         }).then((res: any) => {
             let musicUrl = "http://ws.stream.qqmusic.qq.com/" + res.data.data.items[0].filename + "?fromtag=0&guid=" + params.guid + '&vkey=' + res.data.data.items[0].vkey
-            
             let lyric = (lyricData && lyricData.code == '0') ? lyricData.lyric : '无';
             resolve({
                 vkey: res.data.data.items[0].vkey,
@@ -107,25 +122,28 @@ function getMusicToken(params: { guid: string; songmid: string; }, lyricData?: a
 /**
 	* @TODO: 获取top100
     */
+class paramC {
+    code: string = ''
+    date: string = ''
+    curnum: number = 0
+    curpage: number = 1
+    list: any[] = []
+    topinfo: any = undefined
+    constructor(parameters: any) {
+        this.code = parameters.code
+        this.date = parameters.date
+        this.curnum = parameters.total_song_num
+        this.topinfo = parameters.topinfo
+    }
+}
 function getMusicTop() {
     return new Promise((resolve, reject) => {
         musicInterface({
             method: 'get',
             url: apiUrl.top100Url
-        }).then((res: { data: any; code: any; date: any; total_song_num: any; topinfo: any; songlist: any; }) => {
+        }).then((res: any) => {
             res = res.data;
-          
-            class paramC {
-                code:string = res.code
-                date:string = res.date
-                curnum:number = res.total_song_num
-                curpage:number = 1
-                list: any[] = []
-                topinfo: any = res.topinfo
-            }
-
-            let params = new paramC();
-
+            let params = new paramC(res);
             for (let item of res.songlist) {
                 params.list.push({
                     cur_count: item.cur_count,
@@ -180,7 +198,7 @@ async function asyncGetMusicList(params: any) {
 // 歌曲地址
 async function asyncGetMusicToken(params: any) {
     if (params.lyric == '1') {
-        var lyricData = await getLyric(params);
+        let lyricData:any = await getLyric(params);
         return await getMusicToken(params, lyricData);
     } else {
         return await getMusicToken(params);
