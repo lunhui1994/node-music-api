@@ -51,7 +51,7 @@
 eg：
 
 ```
-    http://api.zsfmyz.top/music/list?p=1&n=30&w=简单爱
+    https://api.zsfmyz.top/music/list?p=1&n=30&w=简单爱
 ```
 
 返回参数举例
