@@ -1,4 +1,5 @@
 const express = require('express')
+const compression = require('compression')
 const path = require('path')
 const cache = require('apicache').middleware
 const app = express()
@@ -7,6 +8,8 @@ const app = express()
 const mainRouter = require('./router/main.js');
 
 let publicPath = path.resolve(__dirname, 'public');
+
+app.use(compression())
 
 app.use(express.static(publicPath))
 
