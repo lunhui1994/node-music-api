@@ -7,6 +7,11 @@
     node index.js
 ```
 
+#### 2020/4/2 更新
+
+1. 示例接口改为https
+2. 增加ts改造的分支
+
 #### 2019/12/26 更新
 
 1. 获取歌曲播放地址接口 增加 lyric参数代表是否获取歌词。
@@ -46,7 +51,7 @@
 eg：
 
 ```
-    http://api.zsfmyz.top/music/list?p=1&n=30&w=简单爱
+    https://api.zsfmyz.top/music/list?p=1&n=30&w=简单爱
 ```
 
 返回参数举例
