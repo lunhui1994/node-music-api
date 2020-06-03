@@ -1,21 +1,21 @@
 /* eslint-disable */
-export function getSign (data) {
+export function getSign (data: any) {
   let str = 'abcdefghijklmnopqrstuvwxyz0123456789'
   let count = Math.floor(Math.random() * 7 + 10)
   let sign = 'zza';
   for (let i = 0; i < count; i++) {
     sign += str[Math.floor(Math.random() * 36)]
   }
-  sign += createSign('CJBPACrRuNy7' + JSON.stringify(data))
+  sign += createSign('CJBPACrRuNy7' + JSON.stringify(data), undefined)
   return sign
 }
 
-function createSign (n, t) {
-  function f (n, t) {
+function createSign (n: string, t: number | undefined) {
+  function f (n: number, t: number) {
     return n << t | n >>> 32 - t
   }
 
-  function h (n, t) {
+  function h (n: number, t: number) {
     var o, e, u, p, r
     return u = 2147483648 & n,
       p = 2147483648 & t,
@@ -25,29 +25,29 @@ function createSign (n, t) {
         u ^ p
   }
 
-  function o (n, t, o, e, u, p, r) {
+  function o (n: number, t: number, o: number, e: number, u: any, p: number, r: number) {
     var i
     return n = h(n, h(h((i = t) & o | ~i & e, u), r)),
       h(f(n, p), t)
   }
 
-  function e (n, t, o, e, u, p, r) {
+  function e (n: number, t: number, o: number, e: number, u: any, p: number, r: number) {
     var i
     return n = h(n, h(h(t & (i = e) | o & ~i, u), r)),
       h(f(n, p), t)
   }
 
-  function u (n, t, o, e, u, p, r) {
+  function u (n: number, t: number, o: number, e: number, u: any, p: number, r: number) {
     return n = h(n, h(h(t ^ o ^ e, u), r)),
       h(f(n, p), t)
   }
 
-  function p (n, t, o, e, u, p, r) {
+  function p (n: number, t: number, o: number, e: number, u: any, p: number, r: number) {
     return n = h(n, h(h(o ^ (t | ~e), u), r)),
       h(f(n, p), t)
   }
 
-  function r (n) {
+  function r (n: number) {
     var t, o = '',
       e = ''
     for (t = 0; t <= 3; t++) {

@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import util from './index';
-import { getSign } from '../vander/signbak';
+import { getSign } from '../vander/sign';
 const regExp = util.regExp;
 const json2url = util.json2url;
 
