@@ -25,9 +25,9 @@ router.get('/list', (req: { query: any }, res: { end: (arg0: string) => void }) 
     })
 })
 
-router.get('/song', (req: { query: any }, res: { setHeader: (arg0: string,arg1: string) => void; end: (arg0: string) => void }) => {
+router.get('/song', (req: { query: any }, res: { setHeader: (arg0: string, arg1: string) => void; end: (arg0: string) => void }) => {
     service.asyncGetMusicToken(req.query).then((data: any)=>{
-        res.setHeader('Cache-Control', 'public, max-age=86400 ');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
         res.end(JSON.stringify({
             code: '0',
             data: data

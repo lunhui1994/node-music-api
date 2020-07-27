@@ -86,62 +86,46 @@ interface tokenParams {
 interface tokenLyricData {
     lyric: string
     code: string
-}
-// class tokenParamsData {
-//     format: string = 'json205361747'
-//     platform: string = 'yqq'
-//     cid: string = '205361747'
-//     guid: string = '5043253136' //126548448 5043253136
-//     songmid: string = ''
-//     filename: string = ''
-//     aggr: number = 1
-//     flag_qc: number = 0
-//     cr: number = 0
-//     sign: string
-//     data: object
-//     constructor(parameters: tokenParams) {
-//         this.guid = parameters.guid
-//         this.songmid = parameters.songmid
-//         this.filename = 'C400' + parameters.songmid + '.m4a'
-//         this.sign = parameters.sign
-//         this.data = parameters.data
-//     }
-// }
-
-function getMusicToken(params: tokenParams, lyricData?: tokenLyricData) {
-    let data = {
-        "req": {
-            "module": "CDN.SrfCdnDispatchServer",
-            "method": "GetCdnDispatch",
-            "param": {
-                "guid": params.guid,
-                "calltype": 0,
-                "userip": ""
-            }
-        },
-        "req_0": {
-            "module": "vkey.GetVkeyServer",
-            "method": "CgiGetVkey",
-            "param": {
-                "guid": params.guid,
-                "songmid": [
-                    params.songmid
-                ],
-                "songtype": [
-                    0
-                ],
-                "uin": "562032497",
-                "loginflag": 1,
-                "platform": "20"
-            }
-        },
-        "comm": {
-            "uin": 562032497,
-            "format": "json",
-            "ct": 24,
-            "cv": 0
+} 
+// 获取sign所需信息，发送请求
+class tokenData {
+    req = {
+        "module": "CDN.SrfCdnDispatchServer",
+        "method": "GetCdnDispatch",
+        param: {}
+    }
+    req_0 =  {
+        "module": "vkey.GetVkeyServer",
+        "method": "CgiGetVkey",
+        "param": {
+            "guid": '',
+            "songmid": [''],
+            "songtype": [
+                0
+            ],
+            "uin": "562032497",
+            "loginflag": 1,
+            "platform": "20"
         }
     }
+    comm = {
+        "uin": 562032497, // 自定义qq号
+        "format": "json",
+        "ct": 24,
+        "cv": 0
+    }
+    constructor(parameters: tokenParams) {
+        this.req.param = {
+            "guid": parameters.guid,
+            "calltype": 0,
+            "userip": ""
+        }
+        this.req_0.param.guid = parameters.guid
+        this.req_0.param.songmid = [parameters.songmid]
+    }
+}
+function getMusicToken(params: tokenParams, lyricData?: tokenLyricData) {
+    let data = new tokenData(params)
     let signStr = getSign(data);
     let params_data = {
         sign: signStr,
@@ -157,13 +141,13 @@ function getMusicToken(params: tokenParams, lyricData?: tokenLyricData) {
             url: apiUrl.tokenUrl,
             params: params_data
         }).then((res: any) => {
-            console.log(res.data.req.data.vkey);
             let filename = 'C400' + params.songmid + '.m4a';
+            console.log("https://ws.stream.qqmusic.qq.com/" + filename + "?fromtag=66&uin=0&guid=" + params.guid + '&vkey=' + res.data.req_0.data.midurlinfo[0].vkey)
             // let musicUrl = "https://ws.stream.qqmusic.qq.com/" + filename + "?fromtag=66&uin=0&guid=" + params.guid + '&vkey=' + res.data.req_0.data.midurlinfo[0].vkey
             let musicUrl = "https://ws.stream.qqmusic.qq.com/" + res.data.req_0.data.midurlinfo[0].purl;
             let lyric = (lyricData && lyricData.code == '0') ? lyricData.lyric : '无';
             resolve({
-                vkey: res.data.req.data.vkey,
+                vkey: res.data.req_0.data.midurlinfo[0].vkey,
                 musicUrl: musicUrl,
                 lyric: lyric
             });
