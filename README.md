@@ -6,20 +6,23 @@
 
     node index.js
 ```
-
 #### 2020/6/03
-接口已恢复。感谢蒟蒻…的帮助, 才能这么快解决这个问题。有兴趣可以查看他的关于sign获取的文章
+
+1. 接口已恢复。感谢[蒟蒻...](https://blog.csdn.net/weixin_44159306)的帮助, 才能这么快解决这个问题。有兴趣可以查看他的关于sign获取的[文章](https://blog.csdn.net/weixin_44159306/article/details/106292092)
+2. 之前分出了ts的分支，主要开始维护ts分支，master可能会更新的晚一点，如果需要自己启服务的话可以下载ts分支，有问题也可以回复，我可以协助一下。
 
 #### 2020/5/27
-发现获取vkey的接口现在获取不到了，应该是官方换了请求方式，目前播放地址受到了影响，无法播放，修复时间待定。
+
+1. 发现获取vkey的接口现在获取不到了，应该是官方换了请求方式，目前播放地址受到了影响，无法播放，修复时间待定。
 
 #### 2020/5/7
-之前要使用api的话只能通过服务端请求，嗯嗯..想了想，现在支持跨域了。还是仅测试使用，服务器太渣渣。。经不起造。
 
-#### 2020/4/2 更新
+1. 之前要使用api的话只能通过服务端请求，嗯嗯..想了想，现在支持跨域了。还是仅测试使用，服务器太渣渣。。经不起造。
 
-1. 示例接口改为https
-2. 增加ts改造的分支
+#### 2020/2/25
+
+1. 最近在做新的项目，叫小鱼干APP，可以在百度，vivo，小米，apple store 中下载，暂时没有时间来搞这个音乐api的东西了，不过服务没有停，如果想用来测试或者玩玩的还是可以用的。
+
 
 #### 2019/12/26 更新
 
@@ -33,14 +36,39 @@
 2. 增加福利图片接口
 3. 示例接口更改为https
 
+> 接口仅供交流学习使用
+
+[github 项目地址](https://github.com/lunhui1994/node-music-api)   希望大家给个star 以支撑我初期坚持不懈的动力。
+
+因为之前使用网络上别人封装的音乐api现在无法使用，或者一些需要付费使用，当然这也无可厚非。
+
+但对我而言，只需要简单的一些音乐api做一些东西。 感觉给钱有点亏。 就自己搞一个简单的符合我的需求的吧。
+
+# 文档
+
+<!-- more -->
+
+## 所支持的Api
+
+1. 音乐搜索
+2. 音乐top100列表
+3. 音乐播放地址
+4. 福利图片 (新增 2019/12/24).
+5. 音乐歌词 (新增 2019/12/26).
+
+很简单的三个基本的功能。
+
+所有方法都是GET
 
 本项目所支持的Api
 
-## 音乐 music
+## 一、音乐 music
 
-### 音乐列表
+### 1、音乐列表
 
-#### list
+#### list 
+
+`GET`
 
 | 参数   |  类型  |  描述 |
 | ---    |  ---   | ---   |
@@ -51,68 +79,80 @@
 
 返回参数
 
-| 参数   |  类型  |  描述 |
-| ---   |  ---  | ---   |
-| curpage | int  | 页码| 
-| curnum | int  | 数目| 
-| list |  ---  | 音乐列表 |
-
+| 上级  | 参数   |  类型  |  描述 |
+| --- | ---   |  ---  | ---   |
+| --- | curpage | int  | 页码| 
+| --- | curnum | int  | 数目| 
+| --- | list |  array [ object ] | 音乐列表 |
+| list > {} |  songname  | string    | 歌曲名 |
+| list > {} |  songname   | string    | 歌曲名 |
+| list > {} |  albumname | string    | 专辑名 |
+| list > {} |  songmid  | string    | 歌曲id，用来请求播放地址 |
+| list > {} |  albumimg | string    | 封面图 |
+| list > {} |  singer  | object| 歌手信息 |
+| list > {} > singer |  id | int | 歌手id |
+|  list > {} > singer|  name | string    | 歌手名称 |
 eg：
 
-```
-    https://api.zsfmyz.top/music/list?p=1&n=30&w=简单爱
+```json
+    https://api.zsfmyz.top/music/list?p=1&n=30&w=蔡徐坤
 ```
 
 返回参数举例
 
-```
+```json
     {
-    "curnum": 41,
-    "curpage": 1,
-    "list": [
-        {
-            "songname": "简单爱",
-            "singer": {
-                "id": 4558,
-                "mid": "0025NhlN2yWrP4",
-                "name": "周杰伦",
-                "name_hilight": "周杰伦"
+    "code": "0",
+    "data": {
+        "curnum": 30,
+        "curpage": 1,
+        "list": [
+            {
+                "songname": "情人",
+                "singer": {
+                    "id": 1016794,
+                    "mid": "002nXp292LIOGV",
+                    "name": "蔡徐坤",
+                    "name_hilight": "<em>蔡徐坤</em>"
+                },
+                "albumname": "情人",
+                "songmid": "000aWBBQ2fMyBJ",
+                "albumimg": "http://imgcache.qq.com/music/photo/album_300/88/300_albumpic_12583588_0.jpg"
             },
-            "albumname": "范特西",
-            "songmid": "0009BCJK1nRaad",
-            "albumimg": "http://imgcache.qq.com/music/photo/album_300/17300_albumpic_8217_0.jpg"
-        },
-        {
-            "songname": "简单爱 (Live)",
-            "singer": {
-                "id": 4558,
-                "mid": "0025NhlN2yWrP4",
-                "name": "周杰伦",
-                "name_hilight": "周杰伦"
+            {
+                "songname": "YOUNG",
+                "singer": {
+                    "id": 1016794,
+                    "mid": "002nXp292LIOGV",
+                    "name": "蔡徐坤",
+                    "name_hilight": "<em>蔡徐坤</em>"
+                },
+                "albumname": "YOUNG",
+                "songmid": "004BxrBT3coQnC",
+                "albumimg": "http://imgcache.qq.com/music/photo/album_300/78/300_albumpic_7156278_0.jpg"
             },
-            "albumname": "周杰伦 2004 无与伦比 演唱会 Live CD",
-            "songmid": "0022nw6P1dcHgp",
-            "albumimg": "http://imgcache.qq.com/music/photo/album_300/23300_albumpic_14323_0.jpg"
-        },
-        {
-            "songname": "简单爱 (Live)",
-            "singer": {
-                "id": 143,
-                "mid": "003Nz2So3XXYek",
-                "name": "陈奕迅",
-                "name_hilight": "陈奕迅"
+            {
+                "songname": "Wait Wait Wait",
+                "singer": {
+                    "id": 1016794,
+                    "mid": "002nXp292LIOGV",
+                    "name": "蔡徐坤",
+                    "name_hilight": "<em>蔡徐坤</em>"
+                },
+                "albumname": "Wait Wait Wait",
+                "songmid": "002kRCBE4dfcU2",
+                "albumimg": "http://imgcache.qq.com/music/photo/album_300/19/300_albumpic_4359819_0.jpg"
             },
-            "albumname": "2015江苏卫视新年演唱会",
-            "songmid": "001IcyF42TKTf1",
-            "albumimg": "http://imgcache.qq.com/music/photo/album_300/53300_albumpic_929853_0.jpg"
-        }
-    ]
+        //  .....
+        ]
+    }
 }
 ```
 
-### 音乐top100列表
+### 2、音乐top100列表
 
 #### top
+`GET`
 
 参数
 
@@ -121,13 +161,22 @@ eg：
 
 返回参数
 
-| 参数   |  类型  |  描述 |
-| ---   |  ---  | ---   |
-| date | string  | 日期| 
-| curpage | int  | 页码| 
-| curnum | int  | 数目| 
-| list |  ---  | 音乐列表 |
-| topinfo |  ---  | 音乐top100信息 |
+| 上级 | 参数   |  类型  |  描述 |
+| --- | ---   |  ---  | ---   |
+| --- | date | string  | 日期| 
+| --- | curpage | int  | 页码| 
+| --- | curnum | int  | 数目| 
+| --- | list |  ---  | 音乐列表 |
+| --- | list |  array [ object ] | 音乐列表 |
+| list > {} |  songname  | string    | 歌曲名 |
+| list > {} |  songname   | string    | 歌曲名 |
+| list > {} |  albumname | string    | 专辑名 |
+| list > {} |  songmid  | string    | 歌曲id，用来请求播放地址 |
+| list > {} |  albumimg | string    | 封面图 |
+| list > {} |  singer  | object| 歌手信息 |
+| list > {} > singer |  id | int | 歌手id |
+|  list > {} > singer|  name | string    | 歌手名称 |
+| --- | topinfo |  ---  | 音乐top100信息 |
 
 list中歌曲信息比普通列表多了排名: cur_count
 
@@ -135,13 +184,13 @@ list中歌曲信息比普通列表多了排名: cur_count
 
 eg：
 
-```
+```json
     https://api.zsfmyz.top/music/top
 ```
 
 返回参数举例
 
-```
+```json
     {
     "code": "0",
     "data": {
@@ -281,9 +330,10 @@ eg：
 }
 ```
 
-### 音乐播放地址
+### 3、音乐播放地址
 
 #### song
+`GET`
 
 
 | 参数   |  类型  |  描述 |
@@ -303,27 +353,28 @@ eg：
 
 eg:
 
-```
-    https://api.zsfmyz.top/music/song?songmid=003lghpv0jfFXG&guid=126548448
+```json
+    https://api.zsfmyz.top/music/song?songmid=000aWBBQ2fMyBJ&guid=126548448
 ```
 
 返回参数举例
 
-```
+```json
     {
     "code": "0",
     "data": {
-        "musicUrl": "http://ws.stream.qqmusic.qq.com/C400003lghpv0jfFXG.m4a?fromtag=0&guid=126548448&vkey=7888A32FC10168AAD914CA484401762D7F060E7337C0B9187D8B907681BB177669ADB3DFBF398E0FC4D6ED1E0EC7574716872D7B5FE14322",
+        "musicUrl": "https://ws.stream.qqmusic.qq.com/C400000aWBBQ2fMyBJ.m4a?guid=126548448&vkey=AD7592245F651C2509E1C9B94E3A234B039967023066203214278A71E9DE4E6F3972EA83BB52F80EE74218B39305B6EAC9B0F6A610B0F947&uin=0&fromtag=66",
         "lyric": "无"
     }
 }
 
 ```
 
-### 音乐歌词
+### 4、音乐歌词
 
 #### lyric
 
+`GET`
 
 | 参数   |  类型  |  描述 |
 | ---    |  ---   | ---   |
@@ -340,13 +391,13 @@ eg:
 
 eg:
 
-```
+```json
     https://api.zsfmyz.top/music/lyric?songmid=000wocYU11tSzS
 ```
 
 返回参数举例
 
-```
+```json
     {
     "code": "0",
     "data": {
@@ -356,6 +407,8 @@ eg:
 }
 
 ```
+
+------
 
 
 ## 福利图片 welfare
