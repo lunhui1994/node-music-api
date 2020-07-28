@@ -4,7 +4,9 @@
 ```
     npm install
 
-    node index.js
+    npm build // 构建dist文件夹
+
+    node index.js // 进入dist文件夹进行启动
 ```
 #### 2020/6/03
 
