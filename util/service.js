@@ -2,7 +2,7 @@
 
 const axios = require('axios')
 const util = require('./index.js')
-const getSign = require('../vander/sign.js')
+const getSign = require('../vender/sign.js')
 
 const regExp = util.regExp;
 const json2url = util.json2url;
